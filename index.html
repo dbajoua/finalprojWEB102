@@ -1,0 +1,412 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Form Example</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+      integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+      crossorigin="anonymous"
+    />
+
+      <style>
+      .hero-body {
+        background-color: rgb(18, 20, 134);
+      }
+
+      .upvote-btn {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: gray;
+        margin-bottom: 1000;
+      }
+
+      .votes {
+        font-size: 1.2rem;
+        color: gray;
+        margin-bottom: 1000;
+      }
+
+    </style>
+  </head>
+
+
+  
+
+  <body>
+    <section class="hero is-link">
+      <!-- Hero head: will stick at the top -->
+      <div class="hero-head">
+        <nav class="navbar">
+          <div class="container">
+            <div class="navbar-brand">
+              <a class="navbar-item">
+                <h1 class="title" id="home">College Collective</h1>
+              </a>
+              <span class="navbar-burger" data-target="navbarMenuHeroA">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </div>
+            <div id="navbarMenuHeroA" class="navbar-menu">
+              <div class="navbar-end">
+                <a class="navbar-item is-active" href="#home"> Home </a>
+                <a class="navbar-item" href="#aboutus"> Posts: </a>
+                <a class="navbar-item" href="#ourteam"> Welcome </a>
+                <span class="navbar-item">
+                  <a class="button is-link is-inverted" href="#contact">
+                    <span class="icon">
+                    
+                    </span>
+                    <span>Create a Post</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Hero content: will be in the middle -->
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <h1 class="title">Welcome to College Collective: A place to share quotes of the day,
+            experiences, or advice!
+          </h1>
+          <p class="subtitle"></p>
+        </div>
+      </div>
+    </section>
+    <section class="section is-medium container">
+      <h1 class="title" id="aboutus">Posts</h1>
+      <h2 class="subtitle">
+      
+      </h2>
+      <div id="contact-submissions"></div>
+    </section>
+    <hr />
+    <section class="section is-medium container">
+      <h1 class="title" id="ourteam">Welcome</h1>
+      <h2 class="subtitle">
+      
+      </h2>
+    </section>
+    <hr />
+    <section class="section container">
+      <form name="contact" id="contact-form">
+        <h1 class="title" id="contact">Create a new Post:</h1>
+        <div class="field">
+          <label class="label" for="name">Post Title</label>
+          <div class="control">
+            <input
+              required
+              class="input"
+              type="text"
+              placeholder="title here"
+              name="name"
+            />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="email">School Email</label>
+          <div class="control has-icons-left">
+            <input
+              class="input"
+              type="email"
+              required
+              placeholder="Email input"
+              name="email"
+            />
+            <span class="icon is-small is-left">
+              <i class="fas fa-envelope"></i>
+            </span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="subject">Post Type</label>
+          <div class="control">
+            <div class="select">
+              <select name="subject">
+                
+                <option value="Quote of the Day">Quote of the Day "💬"</option>
+                <option value="Experience">Experience 📜</option>
+                <option value="Advice">Advice 🤔</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="message">Textual Content / Summary</label>
+          <div class="control">
+            <textarea
+              required
+              class="textarea"
+              placeholder="Textarea"
+              name="message"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-link" type="submit">Submit</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    
+    <div class="submission">
+      <h3>Number</h3>
+      <p>Likes</p>
+      <button class="upvote-btn"><i class="fas fa-arrow-up"></i></button>
+      <p class="votes">0</p>
+    </div>
+
+    
+    <section class="section is-medium container">
+      <h1 class="title" id="aboutus">Posts</h1>
+      <h2 class="subtitle"></h2>
+      <form id="search-form">
+        <div class="field has-addons">
+          <div class="control">
+            <input class="input" type="text" placeholder="Search by Submission Title" id="search-input">
+          </div>
+          <div class="control">
+            <button class="button is-link" type="submit" id="search-button">
+              <span class="icon">
+                <i class="fas fa-search"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      </form>
+      <div id="contact-submissions"></div>
+    </section>
+    
+
+
+  </body>
+  <script src="https://unpkg.com/@supabase/supabase-js"></script>
+  <script>
+
+    //NEW: to Display summary page
+    const contactForm = document.getElementById("contact-form");
+    contactForm.addEventListener("submit", function(event) {
+       // Get form data
+        const formData = new FormData(document.getElementById("contact-form"));
+
+      // Create new submission div
+      const submissionDiv = document.createElement("div");
+      submissionDiv.classList.add("box");
+      submissionDiv.innerHTML = `
+        <p><strong>Title:</strong> ${formData.get("name")}</p>
+        <p><strong>Email:</strong> ${formData.get("email")}</p>
+        <p><strong>Type:</strong> ${formData.get("subject")}</p>
+        <p><strong>Thoughts:</strong> ${formData.get("message")}</p>
+      `;
+
+      // Append new submission div to contact-submissions div
+      const contactSubmissionsDiv = document.getElementById("contact-submissions");
+      contactSubmissionsDiv.appendChild(submissionDiv);
+
+      // Reset form
+      document.getElementById("contact-form").reset();
+
+    });
+    //END OF NEW
+
+
+
+
+
+
+      const { createClient } = supabase //imported supabase
+      supabase = createClient("https://mrevsbzefuzlbsapkycg.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1yZXZzYnplZnV6bGJzYXBreWNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODEyNzg2NjUsImV4cCI6MTk5Njg1NDY2NX0.DggCOtJaXNjHrUck91EM0A6x-ydsfCZDqOE_oberC74")
+      
+      const form = document.querySelector('#contact-form')
+      form.addEventListener('submit', async (event) => {
+
+          event.preventDefault() //prevents page from refreshing
+
+          const formInputs = form.querySelectorAll('input, select, textarea')
+
+          let submision = {}
+
+          formInputs.forEach(element => {
+            const { value, name } = element
+            if (value) {
+                submision[name] = value
+            }
+          })
+
+          const { error } = await supabase.from('entries').insert([submision], { returning: 'minimal'})
+/*
+          if (error) {
+              alert('There was an error please try again')
+          } else {
+              alert('Thanks for contacting us')
+          }
+*/
+          formInputs.forEach(element => element.value = '')
+
+
+
+              //NEW: to Display summary page
+              //const contactForm = document.getElementById("contact-form");
+              contactForm.addEventListener("submit", function(event) {
+                // Get form data
+                  const formData = new FormData(document.getElementById("contact-form"));
+
+                // Create new submission div
+                const submissionDiv = document.createElement("div");
+                submissionDiv.classList.add("box");
+                submissionDiv.innerHTML = `
+                  <p><strong>Name:</strong> ${formData.get("name")}</p>
+                  <p><strong>Email:</strong> ${formData.get("email")}</p>
+                  <p><strong>Field of Study:</strong> ${formData.get("subject")}</p>
+                  <p><strong>Description:</strong> ${formData.get("message")}</p>
+                `;
+
+                // Append new submission div to contact-submissions div
+                const contactSubmissionsDiv = document.getElementById("contact-submissions");
+                contactSubmissionsDiv.appendChild(submissionDiv);
+
+                // Reset form
+                document.getElementById("contact-form").reset();
+
+              });
+              //END OF NEW
+
+      })
+
+
+
+      const upvoteBtns = document.querySelectorAll('.upvote-btn');
+
+      //UPVOTES NEW
+      upvoteBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const votesElem = btn.nextElementSibling;
+          let votes = Number(votesElem.textContent);
+          votes++;
+          votesElem.textContent = votes;
+        });
+      });
+
+     
+const submissionsDiv = document.querySelector("#contact-submissions");
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const nameInput = document.querySelector('input[name="name"]');
+  const emailInput = document.querySelector('input[name="email"]');
+  const subjectSelect = document.querySelector('select[name="subject"]');
+  const messageTextArea = document.querySelector('textarea[name="message"]');
+
+  const submissionDiv = document.createElement("div");
+  const submissionTitle = document.createElement("h3");
+  const submissionEmail = document.createElement("p");
+  const submissionSubject = document.createElement("p");
+  const submissionMessage = document.createElement("p");
+  const submissionDate = document.createElement("p"); // create new paragraph for date and time
+
+  submissionTitle.innerHTML = nameInput.value;
+  submissionEmail.innerHTML = emailInput.value;
+  submissionSubject.innerHTML = subjectSelect.value;
+  submissionMessage.innerHTML = messageTextArea.value;
+  submissionDate.innerHTML = `Submitted on ${new Date().toLocaleString()}`; // set the innerHTML of the date paragraph to the current date and time
+
+  submissionDiv.appendChild(submissionTitle);
+  submissionDiv.appendChild(submissionEmail);
+  submissionDiv.appendChild(submissionSubject);
+  submissionDiv.appendChild(submissionMessage);
+  submissionDiv.appendChild(submissionDate); // append the date paragraph to the submissionDiv
+
+  submissionsDiv.appendChild(submissionDiv);
+
+  nameInput.value = "";
+  emailInput.value = "";
+  subjectSelect.selectedIndex = 0;
+  messageTextArea.value = "";
+});
+
+//SEARCH BAR NEW
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('contact-submissions');
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const query = input.value.trim();
+    if (query.length > 0) {
+      searchSubmissions(query);
+    }
+  });
+
+  function searchSubmissions(query) {
+    fetch(`/search?title=${encodeURIComponent(query)}`)
+      .then(response => response.json())
+      .then(data => {
+        results.innerHTML = '';
+        if (data.length === 0) {
+          results.innerHTML = '<p>No results found.</p>';
+        } else {
+          data.forEach(submission => {
+            results.innerHTML += `
+              <div class="box">
+                <article class="media">
+                  <div class="media-content">
+                    <div class="content">
+                      <p>
+                        <strong>${submission.SubmissionTitle}</strong>
+                        <br>
+                        ${submission.SubmissionContent}
+                      </p>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            `;
+          });
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        results.innerHTML = '<p>Sorry, something went wrong.</p>';
+      });
+  }
+
+  //number of likes
+  const submissionDiv = document.querySelector('#contact-submissions');
+
+  let clicks = 0;
+
+  submissionDiv.addEventListener('click', () => {
+    clicks++;
+    console.log(`Number of clicks: ${clicks}`);
+  });
+
+
+
+
+
+
+
+
+  </script>
+</html>
